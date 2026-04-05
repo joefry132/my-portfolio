@@ -1,45 +1,44 @@
-// 1. Scroll Reveal Animation
-function reveal() {
-    var reveals = document.querySelectorAll(".reveal");
-    for (var i = 0; i < reveals.length; i++) {
-        var windowHeight = window.innerHeight;
-        var elementTop = reveals[i].getBoundingClientRect().top;
-        var elementVisible = 150;
-        if (elementTop < windowHeight - elementVisible) {
-            reveals[i].classList.add("active");
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Highlight Active Navigation Link
+    const currentPath = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('nav a');
+    
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.style.background = '#fff';
+            link.style.color = '#000';
         }
+    });
+
+    // 2. Smooth Reveal Animation for Cards
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Apply animation styles to cards and sections
+    const elementsToAnimate = document.querySelectorAll('.card, section h1, .profile-photo');
+    elementsToAnimate.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease-out';
+        observer.observe(el);
+    });
+
+    // 3. Contact Button Feedback
+    const emailBtn = document.querySelector('.btn[href^="mailto"]');
+    if (emailBtn) {
+        emailBtn.addEventListener('click', () => {
+            console.log("Email client opening...");
+            // Optional: You could add a 'Thank you' message here
+        });
     }
-}
-
-window.addEventListener("scroll", reveal);
-
-// Run reveal on load to check if elements are already in view
-reveal();
-
-// 2. Typewriter Effect (Home Page Only)
-const typewriterElement = document.querySelector("#typewriter span");
-if (typewriterElement) {
-    const text = "My Portfolio";
-    let index = 0;
-
-    function type() {
-        if (index < text.length) {
-            typewriterElement.textContent += text.charAt(index);
-            index++;
-            setTimeout(type, 150);
-        }
-    }
-    // Start typing after a short delay
-    setTimeout(type, 500);
-}
-
-// 3. Navbar Active State
-const currentLocation = location.href;
-const menuItem = document.querySelectorAll('nav a');
-const menuLength = menuItem.length;
-for (let i = 0; i < menuLength; i++) {
-    if (menuItem[i].href === currentLocation) {
-        menuItem[i].style.background = "#fff";
-        menuItem[i].style.color = "#000";
-    }
-}
+});
