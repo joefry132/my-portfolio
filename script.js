@@ -10,8 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Smooth Reveal Animation for Cards
-    const observerOptions = {
+    // 2. Scroll Reveal Animation
+    const sections = document.querySelectorAll('section');
+    const options = {
         threshold: 0.1
     };
 
@@ -22,23 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.target.style.transform = 'translateY(0)';
             }
         });
-    }, observerOptions);
+    }, options);
 
-    // Apply animation styles to cards and sections
-    const elementsToAnimate = document.querySelectorAll('.card, section h1, .profile-photo');
-    elementsToAnimate.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'all 0.6s ease-out';
-        observer.observe(el);
+    sections.forEach(section => {
+        // Initial state for animation
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = 'all 0.6s ease-out';
+        observer.observe(section);
     });
-
-    // 3. Contact Button Feedback
-    const emailBtn = document.querySelector('.btn[href^="mailto"]');
-    if (emailBtn) {
-        emailBtn.addEventListener('click', () => {
-            console.log("Email client opening...");
-            // Optional: You could add a 'Thank you' message here
-        });
-    }
 });
